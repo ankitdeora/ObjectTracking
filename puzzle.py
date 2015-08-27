@@ -75,12 +75,20 @@ def swapRegions(n):
     if n==0 or n==-1:
         return
     elif n==1:
+        if white_x == (n_blocks-1)*g_block_size + g_block_size/2:
+            return
         white_x += g_block_size
     elif n==2:
+        if white_y == g_block_size/2:
+            return
         white_y -= g_block_size
     elif n==3:
+        if white_x == g_block_size/2:
+            return
         white_x -= g_block_size
     elif n==4:
+        if white_y == (n_blocks-1)*g_block_size + g_block_size/2:
+            return
         white_y += g_block_size
 
     newImg[prev_y-g_block_size/2:prev_y+g_block_size/2,prev_x-g_block_size/2:prev_x+g_block_size/2,:] = newImg[white_y-g_block_size/2:white_y+g_block_size/2,white_x-g_block_size/2:white_x+g_block_size/2,:]
@@ -128,12 +136,12 @@ def draw_rectangle(event,x,y,flags,param):
         ##print "white coord :",white_x,white_y
 
 
-cv2.namedWindow('Puzzle : press "Esc" to close')
-cv2.setMouseCallback('Puzzle : press "Esc" to close',draw_rectangle)
+cv2.namedWindow('Puzzle : use "aswd" or mouse for controls and press "Esc" to close')
+cv2.setMouseCallback('Puzzle : use "aswd" or mouse for controls and press "Esc" to close',draw_rectangle)
 ##cv2.imshow('sq',square_img)
 
 while(1):
-    cv2.imshow('Puzzle : press "Esc" to close',newImg)
+    cv2.imshow('Puzzle : use "aswd" or mouse for controls and press "Esc" to close',newImg)
     k = cv2.waitKey(20)
     if k == 27:
         break
