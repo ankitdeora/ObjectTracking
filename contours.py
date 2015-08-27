@@ -19,7 +19,7 @@ perimeter = cv2.arcLength(cnt,True)
 
 cv2.circle(img,(cx,cy),5,(100,100,0),-1)
 
-cv2.drawContours(img, contours, 8, (0,125,125), 3)
+cv2.drawContours(img, contours, -1, (0,125,125), -1)
 
 ellipse = cv2.fitEllipse(contours[9])
 rect = cv2.minAreaRect(contours[9])
@@ -30,9 +30,9 @@ box1 = np.int0(box1)
 
 box2 = cv2.cv.BoxPoints(rect)
 box2 = np.int0(box2)
-cv2.drawContours(img,[box1,box2],-1,(0,0,255),2)
-cv2.circle(img,(707,86),5,(255,255,0),-1)
-cv2.ellipse(img,ellipse,(0,255,0),2)
+#cv2.drawContours(img,[box1,box2],-1,(0,0,255),2)
+#cv2.circle(img,(707,86),5,(255,255,0),-1)
+#cv2.ellipse(img,ellipse,(0,255,0),2)
 
 cv2.namedWindow('img',cv2.WINDOW_AUTOSIZE)
 cv2.imshow('img',img)

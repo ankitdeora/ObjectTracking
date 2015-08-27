@@ -14,8 +14,12 @@ import numpy as np
 import cv2
 
 img = cv2.imread('C:\\Users\\ankitdeora2856\\Desktop\\pic1.jpg',0)
+h,w = img.shape
+temp = np.zeros((h,w,3),np.uint8)
+temp[:,:,0] = img
 
-eqImg = cv2.equalizeHist(img)
+
+#eqImg = cv2.equalizeHist(img)
 
 ##
 ##lower_reso = cv2.pyrDown(img)
@@ -45,7 +49,9 @@ eqImg = cv2.equalizeHist(img)
 ##cv2.imshow('grad',grad)
 ##cv2.imshow('bright',img2)
 
-cv2.imshow('image',eqImg)
+#cv2.imshow('image',eqImg)
+cv2.imshow('image',img)
+cv2.imshow('temp',temp)
 ##cv2.imwrite('C:\\Users\\ankitdeora2856\\Desktop\\picsave.bmp',eqImg)
 
 ##meta_img = np.array([[155,255],[40,155]],np.uint8)
