@@ -137,6 +137,14 @@ while(1):
     k = cv2.waitKey(20)
     if k == 27:
         break
+    elif k==100:
+        swapRegions(3)
+    elif k==97:
+        swapRegions(1)
+    elif k==115:
+        swapRegions(2)
+    elif k==119:
+        swapRegions(4)
 
 cv2.waitKey(0)
 cv2.destroyAllWindows()
