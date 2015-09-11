@@ -1,41 +1,6 @@
 import numpy as np
 import cv2
 from random import shuffle
-import ttk
-from Tkinter import *
-
-def sel():
-    global n_blocks
-    n_blocks = var.get()
-
-root = Tk()
-
-var = IntVar()
-R1 = Radiobutton(root, text="Easy", variable=var, value=4,
-                  command=sel)
-R1.pack( anchor = W )
-
-R2 = Radiobutton(root, text="Medium", variable=var, value=5,
-                  command=sel)
-R2.pack( anchor = W )
-
-R3 = Radiobutton(root, text="Difficult", variable=var, value=8,
-                  command=sel)
-R3.pack( anchor = W)
-
-label = Label(root)
-label.pack()
-
-class quitButton(Button):
-    def __init__(self, parent):
-        Button.__init__(self, parent)
-        self['text'] = 'OK'
-        self['command'] = parent.destroy
-        self.pack(side=BOTTOM)
-
-
-quitButton(root)
-mainloop()
 
 def randomize_blocks(image,NB):
     lh,lw,lc = image.shape
@@ -50,6 +15,21 @@ def randomize_blocks(image,NB):
         shuffled_img[sy*block_size:(sy+1)*block_size,sx*block_size:(sx+1)*block_size,:] = image[y*block_size:(y+1)*block_size,x*block_size:(x+1)*block_size,:]
 
     return shuffled_img
+
+matchArr = []
+swapCount = 0
+
+def match(old_img,new_img):
+    global matchArr,n_blocks,g_block_size
+    matchArr = []
+    for i in range(n_blocks*n_blocks):
+        tx,ty = i%n_blocks,i/n_blocks
+        if (new_img[ty*g_block_size:(ty+1)*g_block_size,tx*g_block_size:(tx+1)*g_block_size,:] == old_img[ty*g_block_size:(ty+1)*g_block_size,tx*g_block_size:(tx+1)*g_block_size,:]).all():
+            matchArr.append(1)
+        else:
+            matchArr.append(0)
+    if matchArr.count(1)>=n_blocks*n_blocks-3:
+        return True
 
 def inRegion(tx,ty):
     ##region_number = -1
@@ -68,7 +48,7 @@ def inRegion(tx,ty):
     return region_number
 
 def swapRegions(n):
-    global white_x, white_y,newImg
+    global white_x, white_y,newImg,swapCount
     prev_x = white_x
     prev_y = white_y
 
@@ -78,27 +58,31 @@ def swapRegions(n):
         if white_x == (n_blocks-1)*g_block_size + g_block_size/2:
             return
         white_x += g_block_size
+        swapCount+=1
     elif n==2:
         if white_y == g_block_size/2:
             return
         white_y -= g_block_size
+        swapCount+=1
     elif n==3:
         if white_x == g_block_size/2:
             return
         white_x -= g_block_size
+        swapCount+=1
     elif n==4:
         if white_y == (n_blocks-1)*g_block_size + g_block_size/2:
             return
         white_y += g_block_size
+        swapCount+=1
 
     newImg[prev_y-g_block_size/2:prev_y+g_block_size/2,prev_x-g_block_size/2:prev_x+g_block_size/2,:] = newImg[white_y-g_block_size/2:white_y+g_block_size/2,white_x-g_block_size/2:white_x+g_block_size/2,:]
     newImg[white_y-g_block_size/2:white_y+g_block_size/2,white_x-g_block_size/2:white_x+g_block_size/2,:] = 255
 
 
-##n_blocks = 5
+n_blocks = 5
 a=0
-##img = cv2.imread('C:\\Users\\ankitdeora2856\\Desktop\\pic1.jpg')
-img = cv2.imread('harsha1.jpg')
+img = cv2.imread('C:\\Users\\ankitdeora2856\\Desktop\\pyImages\\pic1.jpg')
+##img = cv2.imread('harsha1.jpg')
 h,w,c = img.shape
 
 ##print h,w
@@ -154,6 +138,13 @@ while(1):
         swapRegions(2)
     elif k==119:
         swapRegions(4)
+    if match(square_img,newImg):
+        print "you released the queen from the puzzle, you may ask her for 1 wish :P"
+        print "your number of moves :", swapCount
+        cv2.imshow('Puzzle : use "aswd" or mouse for controls and press "Esc" to close',square_img)
+        break
 
-cv2.waitKey(0)
-cv2.destroyAllWindows()
+
+j=cv2.waitKey(0)
+if j==27:
+    cv2.destroyAllWindows()
