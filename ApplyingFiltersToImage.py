@@ -4,6 +4,9 @@ from matplotlib import pyplot as plt
 
 
 img = cv2.imread('C:\\Users\\ankitdeora2856\\Desktop\\pyImages\\pic1.jpg',0)
+
+median = cv2.medianBlur(img,3)
+
 # simple averaging filter without scaling parameter
 mean_filter = np.ones((8,8))/64
 
@@ -39,7 +42,6 @@ filter_name = ['mean_filter', 'gaussian','laplacian', 'sobel_x', \
 
 
 filtered_img = [cv2.filter2D(img,-1,w,(-1,-1)) for w in filters]
-gabor_img = cv2.filter2D(img,-1,gabor_kernel,(-1,-1))
 
 ##for i in range(6):
 ##    cv2.namedWindow('filter'+str(i),cv2.WINDOW_NORMAL)
@@ -47,7 +49,8 @@ gabor_img = cv2.filter2D(img,-1,gabor_kernel,(-1,-1))
 
 #cv2.namedWindow('original',cv2.WINDOW_NORMAL)
 cv2.imshow('original', img)
-cv2.imshow('gabored',gabor_img)
+cv2.imshow('median', median)
+
 
 if cv2.waitKey(0)==27:
     cv2.destroyAllWindows()
